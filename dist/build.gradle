@@ -21,6 +21,7 @@ dependencies {
 	compile project(':gen.jdt')
 	compile project(':gen.js')
 	compile project(':gen.ruby')
+	compile project(':gen.envision')
 }
 
 run {
