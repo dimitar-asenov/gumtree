@@ -38,9 +38,11 @@ import java.util.Map;
 public class DiffServer extends NanoHTTPD {
 
     public DirectoryComparator comparator;
-
-    public DiffServer(String src, String dst, int port) {
+    public String matcherId;
+    
+    public DiffServer(String src, String dst, int port, String matcherId) {
         super(port);
+        this.matcherId = matcherId;
         comparator = new DirectoryComparator(src, dst);
         comparator.compare();
     }
@@ -58,7 +60,7 @@ public class DiffServer extends NanoHTTPD {
                 if (parms.containsKey("id"))
                     id = Integer.parseInt(parms.get("id"));
                 Pair<File, File> pair = comparator.getModifiedFiles().get(id);
-                return respond(new DiffView(pair.getFirst(), pair.getSecond()));
+                return respond(new DiffView(pair.getFirst(), pair.getSecond(), matcherId));
             } else if ("/script".equals(uri)) {
                 int id = Integer.parseInt(parms.get("id"));
                 Pair<File, File> pair = comparator.getModifiedFiles().get(id);

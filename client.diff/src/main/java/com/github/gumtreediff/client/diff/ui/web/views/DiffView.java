@@ -42,13 +42,17 @@ public class DiffView implements Renderable {
     private File fSrc;
 
     private File fDst;
+    
+    private String matcherId;
 
-    public DiffView(File fSrc, File fDst) throws IOException {
+    public DiffView(File fSrc, File fDst, String matcherId) throws IOException {
         this.fSrc = fSrc;
         this.fDst = fDst;
         TreeContext src = Generators.getInstance().getTree(fSrc.getAbsolutePath());
         TreeContext dst = Generators.getInstance().getTree(fDst.getAbsolutePath());
-        Matcher matcher = Matchers.getInstance().getMatcher(src.getRoot(), dst.getRoot());
+        Matcher matcher = (matcherId == null)
+                ? Matchers.getInstance().getMatcher(src.getRoot(), dst.getRoot())
+                : Matchers.getInstance().getMatcher(matcherId, src.getRoot(), dst.getRoot());
         matcher.match();
         diffs = new HtmlDiffs(fSrc, fDst, src, dst, matcher);
         diffs.produce();
