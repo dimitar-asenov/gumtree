@@ -22,6 +22,7 @@ dependencies {
 	compile project(':gen.js')
 	compile project(':gen.ruby')
 	compile project(':gen.envision')
+	compile project(':client.dump')
 }
 
 run {

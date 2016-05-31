@@ -1,0 +1,6 @@
+description = 'GumTree Node-matching dumping client'
+
+dependencies {
+	compile project(':client')
+	compile project(':client.diff')
+}
