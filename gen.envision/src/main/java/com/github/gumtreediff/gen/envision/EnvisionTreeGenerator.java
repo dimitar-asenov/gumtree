@@ -122,12 +122,40 @@ public class EnvisionTreeGenerator extends TreeGenerator {
 			Pattern p = Pattern.compile("\\t*(\\S+) (\\S+) \\{(\\S+)\\} \\{(\\S+)\\}(\\. [SID]_(.*))?");
 			Matcher m = p.matcher(nodeLine);
 			boolean matched = m.matches();
+			if (!matched)
+			{
+				// In very rare cases, strange unicode characters mess up the match.
+				// Iterate over the string
+				int braces = 0;
+				String head = "";
+				boolean seenValueUnderscore = false;
+				for (int i = 0; i < nodeLine.length(); i++){
+					char c = nodeLine.charAt(i);
+					
+					if (braces < 2)
+					{
+						head += c;
+						if (c == '}') braces++;
+					}
+					else if (seenValueUnderscore)
+						value += c;
+					else if (c == '_')
+						seenValueUnderscore = true;
+				}
+				
+				m = p.matcher(head);
+				matched = m.matches();
+			}
+			else
+			{
+				value = m.group(6);
+			}
+			
 			assert matched;
 			label = m.group(1);
 			type = m.group(2);
 			id = m.group(3);
 			parentId = m.group(4);
-			value = m.group(6);
 		}
 	}
 	
